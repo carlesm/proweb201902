@@ -6,6 +6,7 @@ from urllib.request import urlopen
 import bs4
 import xmltodict
 import pprint
+import json
 
 class WebClient(object):
     """WebClient class"""
@@ -14,7 +15,7 @@ class WebClient(object):
 
     def download_page(self):
         # connect to the web site
-        f = urlopen("https://api.openweathermap.org/data/2.5/weather?q=LLeida,es&appid=7de50c11e01dc42f66131cb4c8c0dc10&mode=xml&unit=metric")
+        f = urlopen("https://api.openweathermap.org/data/2.5/weather?q=LLeida,es&appid=7de50c11e01dc42f66131cb4c8c0dc10&mode=json&unit=metric")
         # get the download_page
         page = f.read()
         # close the connection
@@ -31,9 +32,11 @@ class WebClient(object):
     #     return None
 
     def search_activities(self, page):
-        xml = xmltodict.parse(page)
-        pprint.pprint(xml)
-        return None
+        dicc = json.loads(page)
+        pprint.pprint(dicc)
+        temp = dicc['main']['temp']
+        weather = dicc['weather'][0]['description']
+        return str(temp)+" and "+weather
 
     def run(self):
         # download a web page
@@ -41,7 +44,7 @@ class WebClient(object):
         # search activities in web page
         data = self.search_activities(page)
         # print the activities
-        # print(data)
+        print(data)
 
 if __name__ == "__main__":
     c = WebClient()
