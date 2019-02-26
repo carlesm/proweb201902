@@ -12,7 +12,7 @@ class WebClient(object):
 
     def download_page(self):
         # connect to the web site
-        f = urlopen("https://www.banggood.com/Flashdeals.html")
+        f = urlopen("https://api.openweathermap.org/data/2.5/weather?q=LLeida,es&appid=7de50c11e01dc42f66131cb4c8c0dc10&mode=xml&unit=metric")
         # get the download_page
         page = f.read()
         # close the connection
@@ -22,15 +22,11 @@ class WebClient(object):
     def search_activities(self, page):
         tree = bs4.BeautifulSoup(page,"lxml")
 
-        ul = tree.find("ul","goodlist_1")
-        li = ul.find_all("li")
-        act_list = []
-        for item in li:
-            # process item
-            price = item.find("span","price").text
-            title = item.find("span", "title").text
-            act_list.append((title, price))
-        return act_list
+        t = tree.find("temperature")
+        w = tree.find("weather")
+
+        print(t["value"]+" and "+w["value"])
+        return None
 
     def run(self):
         # download a web page
@@ -38,7 +34,7 @@ class WebClient(object):
         # search activities in web page
         data = self.search_activities(page)
         # print the activities
-        print(data)
+        # print(data)
 
 if __name__ == "__main__":
     c = WebClient()
