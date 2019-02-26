@@ -4,6 +4,8 @@
 
 from urllib.request import urlopen
 import bs4
+import xmltodict
+import pprint
 
 class WebClient(object):
     """WebClient class"""
@@ -19,13 +21,18 @@ class WebClient(object):
         f.close()
         return page
 
+    # def search_activities(self, page):
+    #     tree = bs4.BeautifulSoup(page,"lxml")
+    #
+    #     t = tree.find("temperature")
+    #     w = tree.find("weather")
+    #
+    #     print(t["value"]+" and "+w["value"])
+    #     return None
+
     def search_activities(self, page):
-        tree = bs4.BeautifulSoup(page,"lxml")
-
-        t = tree.find("temperature")
-        w = tree.find("weather")
-
-        print(t["value"]+" and "+w["value"])
+        xml = xmltodict.parse(page)
+        pprint.pprint(xml)
         return None
 
     def run(self):
